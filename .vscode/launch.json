@@ -1,0 +1,184 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug MusicSpeedChanger",
+            "target": "MusicSpeedChanger",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug MusicSpeedChanger"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release MusicSpeedChanger",
+            "target": "MusicSpeedChanger",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release MusicSpeedChanger"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug ExportTest",
+            "target": "ExportTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug ExportTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release ExportTest",
+            "target": "ExportTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release ExportTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug SettingsTest",
+            "target": "SettingsTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug SettingsTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release SettingsTest",
+            "target": "SettingsTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release SettingsTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug WaveformTest",
+            "target": "WaveformTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug WaveformTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release WaveformTest",
+            "target": "WaveformTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release WaveformTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug LoopTest",
+            "target": "LoopTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug LoopTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release LoopTest",
+            "target": "LoopTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release LoopTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug ReloadTest",
+            "target": "ReloadTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug ReloadTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release ReloadTest",
+            "target": "ReloadTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release ReloadTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug MP3Test",
+            "target": "MP3Test",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug MP3Test"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release MP3Test",
+            "target": "MP3Test",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release MP3Test"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug RevTest",
+            "target": "RevTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug RevTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release RevTest",
+            "target": "RevTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release RevTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Debug RevLoopTest",
+            "target": "RevLoopTest",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug RevLoopTest"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:MusicSpeedChangerMacOS}",
+            "name": "Release RevLoopTest",
+            "target": "RevLoopTest",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release RevLoopTest"
+        }
+    ]
+}
