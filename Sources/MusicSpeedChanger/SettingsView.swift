@@ -94,7 +94,9 @@ struct SettingsView: View {
                 PrefRow("Updates:") {
                     Toggle("Automatically check for updates on startup",
                            isOn: binding(\.autoCheckUpdates))
-                    PrefNote("When on, the app checks this project's GitHub releases on launch.")
+                    Toggle("Include beta (pre-release) versions",
+                           isOn: binding(\.includeBetaUpdates))
+                    PrefNote("When on, the app checks this project's GitHub releases on launch, betas included.")
                 }
                 PrefRow("Feed:") {
                     TextField("GitHub Releases API URL", text: binding(\.updateFeedUrl))
@@ -220,14 +222,15 @@ struct SettingsView: View {
         pendingRelease = nil
         updateStatus = "Checking…"
         let feed = settingsStore.settings.updateFeedUrl
+        let includeBeta = settingsStore.settings.includeBetaUpdates
         Task {
-            let outcome = await UpdateChecker.check(feed: feed)
+            let outcome = await UpdateChecker.check(feed: feed, includeBeta: includeBeta)
             switch outcome {
             case .upToDate(let current):
                 updateStatus = "You're up to date (\(current))."
             case .available(let release):
                 pendingRelease = release
-                updateStatus = "Version \(release.version) is available."
+                updateStatus = "Version \(release.version)\(release.prerelease ? " (beta)" : "") is available."
             case .failed(let message):
                 updateStatus = "Check failed: \(message)"
             }

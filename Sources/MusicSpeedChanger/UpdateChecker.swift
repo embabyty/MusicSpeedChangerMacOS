@@ -10,6 +10,7 @@ enum UpdateChecker {
         let version: String
         let notes: String
         let htmlURL: String?
+        let prerelease: Bool
     }
 
     enum Outcome {
@@ -27,12 +28,32 @@ enum UpdateChecker {
     }
 
     /// One-shot check used by Settings → Check now.
-    static func check(feed: String) async -> Outcome {
+    /// Stable channel reads `.../releases/latest` (full releases only).
+    /// Beta channel reads the releases list so pre-releases are visible too.
+    static func check(feed: String, includeBeta: Bool) async -> Outcome {
         let current = currentVersion ?? "development build"
         guard let url = URL(string: feed.trimmingCharacters(in: .whitespaces)), !feed.isEmpty else {
             return .failed("The update feed URL is empty.")
         }
         do {
+            if includeBeta, let listURL = releasesListURL(from: url) {
+                let (data, _) = try await URLSession.shared.data(from: listURL)
+                guard let arr = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
+                    return .failed("Unexpected response from the releases feed.")
+                }
+                // Newest first; skip drafts. First hit may be a stable or a beta.
+                guard let obj = arr.first(where: { ($0["draft"] as? Bool) != true }),
+                      let tag = obj["tag_name"] as? String
+                else {
+                    // No published releases yet.
+                    return .upToDate(current: current)
+                }
+                return evaluate(tag: tag,
+                                prerelease: (obj["prerelease"] as? Bool) ?? false,
+                                body: obj["body"] as? String ?? "",
+                                htmlURL: obj["html_url"] as? String,
+                                current: current)
+            }
             let (data, _) = try await URLSession.shared.data(from: url)
             guard let obj = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let tag = obj["tag_name"] as? String
@@ -40,22 +61,38 @@ enum UpdateChecker {
                 // No releases published yet (GitHub returns 404 "Not Found" JSON).
                 return .upToDate(current: current)
             }
-            let version = tag.trimmingCharacters(in: CharacterSet(charactersIn: "v"))
-            guard let current = currentVersion else {
-                // Dev build: report what's out there without claiming an update.
-                return .available(Release(version: version,
-                                          notes: obj["body"] as? String ?? "",
-                                          htmlURL: obj["html_url"] as? String))
-            }
-            if compare(version, isNewerThan: current) {
-                return .available(Release(version: version,
-                                          notes: obj["body"] as? String ?? "",
-                                          htmlURL: obj["html_url"] as? String))
-            }
-            return .upToDate(current: current)
+            return evaluate(tag: tag,
+                            prerelease: (obj["prerelease"] as? Bool) ?? false,
+                            body: obj["body"] as? String ?? "",
+                            htmlURL: obj["html_url"] as? String,
+                            current: current)
         } catch {
             return .failed(error.localizedDescription)
         }
+    }
+
+    /// `.../releases/latest` → `.../releases?per_page=20`. Nil for custom feeds,
+    /// which keep single-object behavior.
+    private static func releasesListURL(from url: URL) -> URL? {
+        var s = url.absoluteString
+        while s.hasSuffix("/") { s.removeLast() }
+        guard s.hasSuffix("/releases/latest") else { return nil }
+        return URL(string: String(s.dropLast("/latest".count)) + "?per_page=20")
+    }
+
+    private static func evaluate(tag: String, prerelease: Bool, body: String,
+                                 htmlURL: String?, current: String) -> Outcome {
+        let version = AppVersion.normalized(tag)
+        guard currentVersion != nil else {
+            // Dev build: report what's out there without claiming an update.
+            return .available(Release(version: version, notes: body,
+                                      htmlURL: htmlURL, prerelease: prerelease))
+        }
+        if AppVersion.isNewer(version, than: current) {
+            return .available(Release(version: version, notes: body,
+                                      htmlURL: htmlURL, prerelease: prerelease))
+        }
+        return .upToDate(current: current)
     }
 
     private static var checked = false
@@ -65,17 +102,15 @@ enum UpdateChecker {
         guard !checked else { return }
         checked = true
         guard currentVersion != nil else { return }
-        let feed = AppSettings.load().updateFeedUrl
+        let settings = AppSettings.load()
+        let feed = settings.updateFeedUrl
+        let includeBeta = settings.includeBetaUpdates
         Task {
-            let outcome = await check(feed: feed)
+            let outcome = await check(feed: feed, includeBeta: includeBeta)
             if case .available(let release) = outcome {
                 prompt(tag: release.version, htmlURL: release.htmlURL)
             }
         }
-    }
-
-    private static func compare(_ a: String, isNewerThan b: String) -> Bool {
-        a.compare(b, options: .numeric) == .orderedDescending
     }
 
     static func prompt(tag: String, htmlURL: String?) {

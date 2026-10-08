@@ -12,6 +12,8 @@ public final class AppSettings: Codable {
     // Updates
     public var autoCheckUpdates: Bool = true
     public var updateFeedUrl: String = AppSettings.defaultFeedUrl
+    /// When true, update checks also consider pre-release (beta) versions.
+    public var includeBetaUpdates: Bool = false
 
     // Speed & pitch
     public var defaultTempoPercent: Double = 100
@@ -49,7 +51,7 @@ public final class AppSettings: Codable {
     public var customAccentHex: String = "#2E7D32"
 
     enum CodingKeys: String, CodingKey {
-        case autoCheckUpdates, updateFeedUrl
+        case autoCheckUpdates, updateFeedUrl, includeBetaUpdates
         case defaultTempoPercent, defaultPitchSemitones, applyDefaultsOnFileLoad, tempoSliderStep, pitchSliderStep
         case showTempoPanel, showPitchPanel, showLoopPanel, showEqPanel, waveformPeaks, clickToSeek
         case rememberEffects, rememberFileList, fileListPaths, lastFilePath
@@ -63,6 +65,7 @@ public final class AppSettings: Codable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         autoCheckUpdates = try c.decodeIfPresent(Bool.self, forKey: .autoCheckUpdates) ?? true
         updateFeedUrl = try c.decodeIfPresent(String.self, forKey: .updateFeedUrl) ?? AppSettings.defaultFeedUrl
+        includeBetaUpdates = try c.decodeIfPresent(Bool.self, forKey: .includeBetaUpdates) ?? false
         defaultTempoPercent = try c.decodeIfPresent(Double.self, forKey: .defaultTempoPercent) ?? 100
         defaultPitchSemitones = try c.decodeIfPresent(Double.self, forKey: .defaultPitchSemitones) ?? 0
         applyDefaultsOnFileLoad = try c.decodeIfPresent(Bool.self, forKey: .applyDefaultsOnFileLoad) ?? true
